@@ -8,13 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.maioth.model.Goal;
-import com.maioth.repository.GoalRepositoryImpl;
+import com.maioth.model.GoalReport;
+import com.maioth.repository.GoalRepository;
 
 @Service("goalService")
 public class GoalServiceImpl implements GoalService {
 
 	@Autowired
-	private GoalRepositoryImpl goalRepository;
+	private GoalRepository goalRepository;
 	
 	@Transactional
 	public Goal save(Goal goal) {
@@ -23,7 +24,11 @@ public class GoalServiceImpl implements GoalService {
 	}
 
 	public List<Goal> findAllGoals() {
-		return goalRepository.loadAll();
+		return goalRepository.findAll();
+	}
+
+	public List<GoalReport> findAllGoalReports() {
+		return goalRepository.findAllGoalReports();
 	}
 
 }

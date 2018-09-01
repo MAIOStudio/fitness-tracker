@@ -1,9 +1,19 @@
 package com.maioth.repository;
 
-import com.maioth.model.Goal;
+import java.util.List;
 
-public interface GoalRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
+import com.maioth.model.Goal;
+import com.maioth.model.GoalReport;
+
+@Repository("goalRepository")
+public interface GoalRepository extends JpaRepository<Goal, Long> {
 	
-	Goal save(Goal goal);
+	@Query("Select new com.maioth.model.GoalReport(g.minutes, e.minutes, e.activity) "  + 
+			"from Goal g, Exercise e where g.id = e.goal.id")
+	List<GoalReport> findAllGoalReports();
 
 }

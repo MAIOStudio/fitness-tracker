@@ -2,6 +2,7 @@ package com.maioth.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.maioth.model.Goal;
+import com.maioth.model.GoalReport;
 import com.maioth.service.GoalService;
 
 @Controller
@@ -24,8 +26,16 @@ public class GoalController {
 	private GoalService goalService;
 	
 	@RequestMapping(value = "addGoal", method = RequestMethod.GET)
-	public String addGoal(Model model) {
-		Goal goal = new Goal();
+	public String addGoal(Model model, HttpSession session) {
+//		Goal goal = new Goal();
+		
+		Goal goal = (Goal) session.getAttribute("goal");
+		
+		if(goal == null) {
+			goal = new Goal();
+			goal.setMinutes(10);
+		}
+		
 		goal.setMinutes(10);
 		model.addAttribute("goal", goal);
 		
@@ -55,6 +65,15 @@ public class GoalController {
 		model.addAttribute("goals", goals);
 		
 		return "getGoals";
+	}
+	
+	@RequestMapping(value = "getGoalReports", method = RequestMethod.GET)
+	public String getGoalReports(Model model) {
+		List<GoalReport> goalReports = goalService.findAllGoalReports();
+		
+		model.addAttribute("goalReports", goalReports);
+		
+		return "getGoalReports";
 	}
 	
 }
